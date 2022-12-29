@@ -6,10 +6,8 @@ on:
       - main
 
 jobs:
-  ghcr-push:
-    env:
-      REGISTRY: ghcr.io
-    name: GitHub Container Registry push
+  distribute-images:
+    name: 🚢 Distribute images
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,18 +15,25 @@ jobs:
 
       - name: Login
         run: |
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | \
+            docker login -u theipster --password-stdin
           echo ${{ secrets.GITHUB_TOKEN }} | \
-            docker login ${{ env.REGISTRY }} -u $GITHUB_ACTOR --password-stdin
+            docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
       - name: Build (and tag)
         run: |
           docker build . \
             --label org.opencontainers.image.created="$(date --rfc-3339=seconds --utc)" \
             --label org.opencontainers.image.revision=$GITHUB_SHA \
-            --tag ${{ env.REGISTRY }}/$GITHUB_REPOSITORY:$GITHUB_SHA \
-            --tag ${{ env.REGISTRY }}/$GITHUB_REPOSITORY:latest
+            --label org.opencontainers.image.source=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY \
+            --tag $GITHUB_REPOSITORY:$GITHUB_SHA \
+            --tag $GITHUB_REPOSITORY:latest \
+            --tag ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA \
+            --tag ghcr.io/$GITHUB_REPOSITORY:latest
 
       - name: Push
         run: |
-          docker push ${{ env.REGISTRY }}/$GITHUB_REPOSITORY:$GITHUB_SHA
-          docker push ${{ env.REGISTRY }}/$GITHUB_REPOSITORY:latest
+          docker push $GITHUB_REPOSITORY:$GITHUB_SHA
+          docker push $GITHUB_REPOSITORY:latest
+          docker push ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA
+          docker push ghcr.io/$GITHUB_REPOSITORY:latest
