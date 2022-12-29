@@ -47,11 +47,24 @@ When the above command is run with `--interactive` (`-i`), there will be an extr
 
 ```sh
 $ docker run --interactive [...] theipster/scanner > my-doc.pdf
-> Scanning page 1...
-> Scan another page? ([Y]es for another, [N]o to finish here, or [Q] to quit.)  y
-> Scanning page 2...
-> Scan another page? ([Y]es for another, [N]o to finish here, or [Q] to quit.)  n
-> Finalising... done.
+> Scanning infinity pages, incrementing by 1, numbering from 1
+> Place document no. 1 on the scanner.
+> Press <RETURN> to continue.
+> Press Ctrl + D to terminate.
+>
+> Scanning page 1
+> Scanned page 1. (scanner status = 5)
+> Place document no. 2 on the scanner.
+> Press <RETURN> to continue.
+> Press Ctrl + D to terminate.
+>
+> Scanning page 2
+> Scanned page 2. (scanner status = 5)
+> Place document no. 3 on the scanner.
+> Press <RETURN> to continue.
+> Press Ctrl + D to terminate.
+> Batch terminated, 2 pages scanned
+> Finalising document... done.
 ```
 
 ### Configuration options
