@@ -41,6 +41,19 @@ Ensure your scanner device is turned on (obviously), and made available to the c
 
 Run `docker run --device=/dev/bus/usb/<bus-id>/<device-id> --rm theipster/scanner > my-doc.pdf` to produce a scanned document named `my-doc.pdf`.
 
+### Advanced (multiple page documents)
+
+When the above command is run with `--interactive` (`-i`), there will be an extra option to execute additional scans and append those pages to the same document:
+
+```sh
+$ docker run --interactive [...] theipster/scanner > my-doc.pdf
+> Scanning page 1...
+> Scan another page? ([Y]es for another, [N]o to finish here, or [Q] to quit.)  y
+> Scanning page 2...
+> Scan another page? ([Y]es for another, [N]o to finish here, or [Q] to quit.)  n
+> Finalising... done.
+```
+
 ### Configuration options
 
 This uses [`scanimage`](http://sane-project.org/man/scanimage.1.html) (from `sane-utils` lib) for interacting with the hardware. To configure args, pass the `SCANIMAGE_OPTS` environment variable.
