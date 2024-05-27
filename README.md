@@ -17,23 +17,16 @@ Ensure your scanner device is turned on (obviously), and made available to the c
      PS > winget install usbipd
      ```
 
-  2. _(WSL)_ Install the [`usbip` client](https://github.com/dorssel/usbipd-win/wiki/WSL-support#usbip-client-tools):
-
-     ```sh
-     $ apt install --yes linux-tools-virtual
-     $ update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip | tail -n1` 20
-     ```
-
-  3. _(Host)_ Identify your USB scanner, and then expose it:
+  2. _(Host)_ Identify your USB scanner, and then expose it:
 
      ```powershell
-     PS > usbipd wsl attach --hardware-id 043d:007d    # Lexmark 1270's hardware ID is 043d:007d
+     PS > usbipd attach --wsl --hardware-id 043d:007d    # Lexmark 1270's hardware ID is 043d:007d
      ```
 
-  4. _(WSL)_ Verify the USB device is available:
+  3. _(WSL)_ Verify the USB device is available:
 
      ```sh
-     $ lsusb | grep 043d:007d
+     $ lsusb -d 043d:007d
      ```
 </details>
 
