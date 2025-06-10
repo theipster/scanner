@@ -17,16 +17,54 @@ Ensure your scanner device is turned on (obviously), and made available to the c
      PS > winget install usbipd
      ```
 
-  2. _(Host)_ Identify your USB scanner, and then expose it:
+  2. _(Host)_ Identify your USB scanner:
 
      ```powershell
-     PS > usbipd attach --wsl --hardware-id 043d:007d    # Lexmark 1270's hardware ID is 043d:007d
+     PS > usbipd list
+     Connected:
+     BUSID  VID:PID    DEVICE                                                        STATE
+     ...
+     7-1    043d:007d  X1200 Series                                                  Not shared
+     ...
+     ```
+
+  3. _(Host, admin privileges)_ Register it with `usbipd`:
+
+     ```powershell
+     PS > usbipd bind --hardware-id 043d:007d
+     usbipd: info: Device with hardware-id '043d:007d' found at busid '7-1'.
+
+     PS > usbipd list
+     Connected:
+     BUSID  VID:PID    DEVICE                                                        STATE
+     ...
+     7-1    043d:007d  X1200 Series                                                  Shared
+     ...
+     ```
+
+  4. _(Host)_ Expose it to WSL:
+
+     ```powershell
+     PS > usbipd attach --wsl --hardware-id 043d:007d
+     usbipd: info: Device with hardware-id '043d:007d' found at busid '7-1'.
+     usbipd: info: Using WSL distribution 'Ubuntu' to attach; the device will be available in all WSL 2 distributions.
+     usbipd: info: Loading vhci_hcd module.
+     usbipd: info: Detected networking mode 'nat'.
+     usbipd: info: Using IP address 192.168.112.1 to reach the host.
+
+     PS > usbipd list
+     Connected:
+     BUSID  VID:PID    DEVICE                                                        STATE
+     ...
+     7-1    043d:007d  X1200 Series                                                  Attached
+     ...
      ```
 
   3. _(WSL)_ Verify the USB device is available:
 
      ```sh
      $ lsusb -d 043d:007d
+     Bus 001 Device 002: ID 043d:007d Lexmark International, Inc. Photo 3150
      ```
 </details>
 
